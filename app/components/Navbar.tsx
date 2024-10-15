@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { Fragment } from "react";
+import { useUser } from '@auth0/nextjs-auth0/client';
+
 import Link from "next/link";
 import {
   Disclosure,
@@ -16,6 +18,8 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const Navbar = () => {
   let [currentLink, setCurrentLink] = useState("/"); // Initialize with the default active link
+
+  const { user, isLoading } = useUser();
 
   const navigation = [
     { name: "Home", href: "/", current: currentLink === "/" },
@@ -122,13 +126,13 @@ const Navbar = () => {
                       <MenuItem>
                         {({ focus }) => (
                           <a
-                            href="#"
+                            href="/api/auth/login"
                             className={classNames(
                               focus ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Sign out
+                            Log in
                           </a>
                         )}
                       </MenuItem>

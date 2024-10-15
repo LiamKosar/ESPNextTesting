@@ -19,12 +19,13 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 const Navbar = () => {
   let [currentLink, setCurrentLink] = useState("/"); // Initialize with the default active link
 
-  const { user, isLoading } = useUser();
+  const { user, error, isLoading } = useUser();
 
-  const navigation = [
-    { name: "Home", href: "/", current: currentLink === "/" },
-    { name: "Projects", href: "/projects", current: currentLink === "/projects" },
-  ];
+  const navigation: { name: string; href: string; current: boolean; }[] = [{ name: "Home", href: "/", current: currentLink === "/" }];
+  if (user) {
+    navigation.push({ name: "Dashboard", href: "/dashboard", current: currentLink === "/dashboard" });
+  }
+
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
@@ -38,8 +39,8 @@ const Navbar = () => {
     <Disclosure as="nav" className="bg-gray-800 -mt-2 -mx-2">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
+          <div className="mx-0 w-full px-2 sm:px-6 lg:px-2">
+            <div className="relative flex h-16 items-center justify-between pl-3 pr-5">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="absolute -inset-0.5" />
@@ -52,7 +53,7 @@ const Navbar = () => {
                 </DisclosureButton>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="hidden sm:ml-6 sm:block">
+                <div className="hidden sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <Link
@@ -82,7 +83,7 @@ const Navbar = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={user?.picture ? user.picture : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                         alt=""
                       />
                     </MenuButton>
@@ -126,13 +127,13 @@ const Navbar = () => {
                       <MenuItem>
                         {({ focus }) => (
                           <a
-                            href="/api/auth/login"
+                            href={user ? "/api/auth/logout" : "/api/auth/login"}
                             className={classNames(
                               focus ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Log in
+                            {user ? 'Logout' : 'Log in'}
                           </a>
                         )}
                       </MenuItem>

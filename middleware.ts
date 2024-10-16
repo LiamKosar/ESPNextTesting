@@ -1,5 +1,4 @@
 import type { NextRequest } from 'next/server'
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 export function middleware(request: NextRequest) {
 

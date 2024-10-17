@@ -1,52 +1,34 @@
-import { NextResponse } from "next/server";
-import { sql } from '@vercel/postgres';
-
-export async function GET(request: Request) {
-   // const user = await sql`SELECT first_name FROM "User" WHERE email = 'kosar.liam@gmail.com' LIMIT 1;`;
-//    try {
-//     const result = await sql`INSERT INTO "User" (email)
-//       VALUES ('aaryanjain1203@gmail.com');`
-//     }
-//   catch (error) {
-    //const firstName = user.rows[0]?.first_name;
-   // console.log(result);
-    return NextResponse.json(
-      { message: "result" },
-      { status: 200 }
-    );
-  }
-
+import { sql } from "@vercel/postgres";
+import { simpleApiResponse } from "../simpleApi";
 
 // To handle a POST request to /api
 export async function POST(request: Request) {
   try {
+    const body = await request.json();
+    const register_api_key = process.env.ARDUINO_API_KEY;
+    const authorization = request.headers.get("Authorization");
 
-    const contentType = request.headers.get("Content-Type");
-    const defaultOwner = 'kosar.liam@gmail.com';
-
-    // Read the request body
-    const body = await request.json(); // Read and parse the JSON body
-    console.log(body); // Now, this will print the parsed JSON object
-
-   
-
-    // if (authorization === arduino_api_key_check) {
-    //   console.log("woooohfoashdfljahsdf");
-    //   // Log the headers
-    //   // Do whatever you want with the parsed body
-    //   return NextResponse.json(
-    //     { message: "Api key correct", data: body },
-    //     { status: 200 }
-    //   );
-    // }
-    // else {
-    //   return NextResponse.json(
-    //     { message: "Api key incorrect", data: body },
-    //     { status: 400 }
-    //   );
-    // }
+    // If user provides proper api key
+    if (authorization === register_api_key) {
+      // Try to add the provided email to the vercel postgresql database
+      try {
+        const macAddr = body.macAddr;
+        const version = body.version;
+        // Calling the sql function to register this email
+        const rows = (await sql`select register_device(${macAddr}, ${version})`).rows;
+        const result_msg: string = rows[0].register_device;
+        if (result_msg.includes("Success")) {
+          return simpleApiResponse("Success", "Device registered", 200);
+        } else {
+          return simpleApiResponse("Failure", result_msg, 400);
+        }
+      } catch (error) {
+        return simpleApiResponse("Failure", "Connection Error", 400);
+      }
+    } else {
+      return simpleApiResponse("Failure", "Failed Authorization", 400);
+    }
   } catch (error) {
-    console.error("Error reading request body:", error);
-    return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
+    return simpleApiResponse("Failure", "Invalid JSON body", 400);
   }
 }

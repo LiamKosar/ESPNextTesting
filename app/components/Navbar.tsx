@@ -17,11 +17,12 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const Navbar = () => {
-  let [currentLink, setCurrentLink] = useState("/"); // Initialize with the default active link
+  let [currentLink, setCurrentLink] = useState("/"); 
 
   const { user, error, isLoading } = useUser();
 
   const navigation: { name: string; href: string; current: boolean; }[] = [{ name: "Home", href: "/", current: currentLink === "/" }];
+
   if (user) {
     navigation.push({ name: "Dashboard", href: "/dashboard", current: currentLink === "/dashboard" });
   }
@@ -36,7 +37,7 @@ const Navbar = () => {
   }
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 -mt-2 -mx-2">
+    <Disclosure as="nav" className="bg-gray-800 -mt-2 -mx-2 mb-0">
       {({ open }) => (
         <>
           <div className="mx-0 w-full px-2 sm:px-6 lg:px-2">

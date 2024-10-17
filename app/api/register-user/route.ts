@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { simpleApiResponse } from "../simpleApi";
 
@@ -12,21 +11,26 @@ export async function POST(request: Request) {
     // If user provides proper api key
     if (authorization === register_api_key) {
       
+
       // Try to add the provided email to the vercel postgresql database
       try {
         const email = body.email;
-        const result = await sql`INSERT INTO "User" (email)
-              VALUES (${email});`;
-      } catch (error) {
-        return simpleApiResponse("Failure", "Insertion error", 400);
-      }
+        // Calling the sql function to register this email
+        const rows = (await sql`select register_user(${email})`).rows;
+        const result_msg: string = rows[0].register_user;
 
-      return simpleApiResponse("Success", "Passed Authorization", 200);
+        if (result_msg.includes("Success")) {
+          return simpleApiResponse("Success", "User Added", 200);
+        } else {
+          return simpleApiResponse("Failure", result_msg, 400);
+        }
+      } catch (error) {
+        return simpleApiResponse("Failure", "Connection Error", 400);
+      }
     } else {
       return simpleApiResponse("Failure", "Failed Authorization", 400);
     }
   } catch (error) {
-    console.error("Error reading request body:", error);
     return simpleApiResponse("Failure", "Invalid JSON body", 400);
   }
 }

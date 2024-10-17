@@ -8,20 +8,21 @@ doOtherThing();
 
 async function doOtherThing() {
   const payload = {
-    key1: "value1",
-    key2: 123
+    macAddr: "12kj3h",
   };
 
   try {
-    const response = await fetch("http://localhost:3000/api/test", {
+    const response = await fetch("http://localhost:3000/api/register-new-device", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization" : ''
       },
       body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
+      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 

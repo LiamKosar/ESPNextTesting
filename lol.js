@@ -8,7 +8,8 @@ doOtherThing();
 
 async function doOtherThing() {
   const payload = {
-    macAddr: "12kj3h",
+    macAddr: "123",
+    version: "lol"
   };
 
   try {

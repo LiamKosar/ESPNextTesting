@@ -29,12 +29,12 @@ model device {
 
 model maintenanceprocedure {
   id               Int     @id @default(autoincrement())
-  mac_address      String? @db.VarChar(17)
+  mac_address      String  @db.VarChar(17)
   name             String  @db.VarChar(100)
   description      String?
   interval         BigInt
   current_interval BigInt? @default(0)
-  device           device? @relation(fields: [mac_address], references: [mac_address], onDelete: NoAction, onUpdate: NoAction, map: "fk_device")
+  device           device  @relation(fields: [mac_address], references: [mac_address], onDelete: NoAction, onUpdate: NoAction, map: "fk_device")
 }
 
 model vehicle {

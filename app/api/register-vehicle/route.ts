@@ -5,7 +5,7 @@ import { prisma } from "@/app/lib/prisma";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const register_api_key = process.env.ARDUINO_API_KEY;
+    const register_api_key = process.env.REGISTER_USER_AUTH;
     const authorization = request.headers.get("Authorization");
 
     // If user provides proper api key
@@ -14,13 +14,13 @@ export async function POST(request: Request) {
 
       try {
         const mac_address = body?.macAddr;
-        const version = body?.version;
-        let dateTime = new Date().toUTCString();
-        const user = await prisma.device.create({
+        const name = body?.name;
+        // const image_url = body?.image_url;
+        const vehicle = await prisma.vehicle.create({
           data: {
             mac_address: mac_address,
-            version: version,
-            date_updated: dateTime
+            name: name,
+            image_url: "empty"
           },
         });
         return simpleApiResponse("Success", "Device inserted", 200);

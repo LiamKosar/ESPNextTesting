@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "@/app/lib/prisma";
+import { getSession } from '@auth0/nextjs-auth0';
 
 // To handle a GET request to /api
-export async function GET(request: any) {
-  console.log(request);
+export async function GET(request: NextApiRequest) {
+  
+  
+  const session = await getSession();
+  const email = session?.user.email;
+  console.log(email);
   // Do whatever you want
-  console.log(NextResponse.json({ message: "Hello World" }, { status: 200 }));
   return NextResponse.json({ message: "Hello World" }, { status: 200 });
 }
 

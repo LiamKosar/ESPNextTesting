@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/app/lib/prisma";
 import { getSession } from '@auth0/nextjs-auth0';
 
 // To handle a GET request to /api
-export async function GET(request: NextApiRequest) {
+export async function GET(request: Request) {
   
   
   const session = await getSession();

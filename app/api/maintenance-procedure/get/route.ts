@@ -1,5 +1,6 @@
 import { simpleApiResponse } from "../../simpleApi";
 import { prisma } from "@/app/lib/prisma";
+import { authenticate_ownership } from "../../authenticate_ownership";
 
 export async function GET(request: Request) {
   try {
@@ -13,7 +14,12 @@ export async function GET(request: Request) {
         400
       );
     }
-    
+
+    const userOwnsDevice = await authenticate_ownership(mac_address);
+    if (!userOwnsDevice) {
+      return simpleApiResponse("Failure", "Not authorized", 400);
+    }
+
     try {
       const maintenance_procedures = await prisma.maintenanceprocedure.findMany(
         {
@@ -21,12 +27,11 @@ export async function GET(request: Request) {
             mac_address: mac_address,
           },
         }
-      );   
-      
-    //   const response =  JSON.stringify(maintenance_procedures);
-      console.log(maintenance_procedures);
+      );
 
-      return simpleApiResponse("Success", "Maintenance procedure updated", 200);
+      const response = JSON.stringify(maintenance_procedures);
+
+      return simpleApiResponse("Success", response, 200);
     } catch (error) {
       return simpleApiResponse("Failure", "Database error", 400);
     }

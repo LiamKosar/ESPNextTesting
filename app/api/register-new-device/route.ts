@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     if (authorization === register_api_key) {
       // Try to add the provided email to the vercel postgresql database
       try {
-        const mac_address = body?.macAddr;
+        const mac_address = body?.mac_address;
         const version = body?.version;
         let dateTime = new Date().toUTCString();
         const user = await prisma.device.create({

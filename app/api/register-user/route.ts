@@ -1,3 +1,4 @@
+import { MdEnergySavingsLeaf } from "react-icons/md";
 import { simpleApiResponse } from "../simpleApi";
 import { prisma } from "@/app/lib/prisma";
 
@@ -7,7 +8,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const register_api_key = process.env.REGISTER_USER_AUTH;
     const authorization = request.headers.get("Authorization");
-
     // If user provides proper api key
     if (authorization === register_api_key) {
       // Try to add the provided email to the vercel postgresql database

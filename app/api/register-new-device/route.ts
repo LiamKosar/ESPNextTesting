@@ -7,11 +7,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const register_api_key = process.env.ARDUINO_API_KEY;
     const authorization = request.headers.get("Authorization");
-
+   
     // If user provides proper api key
     if (authorization === register_api_key) {
       // Try to add the provided email to the vercel postgresql database
-
       try {
         const mac_address = body?.macAddr;
         const version = body?.version;
@@ -23,8 +22,9 @@ export async function POST(request: Request) {
             date_updated: dateTime
           },
         });
-        return simpleApiResponse("Success", "Device inserted", 200);
+        return simpleApiResponse("Success", "Device created", 200);
       } catch (error) {
+        console.log("hi");
         return simpleApiResponse("Failure", "Database Error", 400);
       }
     } else {

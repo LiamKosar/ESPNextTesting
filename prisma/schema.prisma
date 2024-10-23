@@ -19,7 +19,7 @@ model User {
 model device {
   mac_address          String                 @id @db.VarChar(17)
   version              String                 @db.VarChar(10)
-  runtime              BigInt?                @default(0)
+  runtime              Float?                @default(0) // Changed to Float for hours
   user_email           String?                @default("kosar.liam@gmail.com") @db.VarChar(255)
   date_updated         String                 @db.VarChar(50)
   User                 User?                  @relation(fields: [user_email], references: [email], onDelete: SetDefault, onUpdate: NoAction, map: "fk_user")
@@ -32,8 +32,8 @@ model maintenanceprocedure {
   mac_address      String  @db.VarChar(17)
   name             String  @db.VarChar(100)
   description      String?
-  interval         BigInt
-  current_interval BigInt? @default(0)
+  interval         Float   // Changed to Float for hours
+  current_interval Float?  @default(0) // Changed to Float for hours
   device           device  @relation(fields: [mac_address], references: [mac_address], onDelete: NoAction, onUpdate: NoAction, map: "fk_device")
 }
 

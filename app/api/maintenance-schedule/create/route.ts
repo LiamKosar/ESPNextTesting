@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     try {
-      const mac_address = body?.macAddr;
+      const mac_address = body?.mac_address;
       const name = body?.name;
       const description = body?.description;
       const interval = body?.interval;
@@ -16,11 +16,11 @@ export async function POST(request: Request) {
         data: {
           mac_address: mac_address,
           name: name,
-          description: description,
+          ...(description && { description }),
           interval: interval
         },
       });
-      return simpleApiResponse("Success", "Device inserted", 200);
+      return simpleApiResponse("Success", "Maintenence procudeure created", 200);
     } catch (error) {
       return simpleApiResponse("Failure", "Database Error", 400);
     }

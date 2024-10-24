@@ -1,6 +1,6 @@
 import { simpleApiResponse } from "../../simpleApi";
 import { prisma } from "@/app/lib/prisma";
-import { authenticate_ownership } from "../../authenticate_ownership";
+import { authenticate_vehicle_ownership } from "../../authenticate_ownership";
 
 // To handle a POST request to /api
 export async function POST(request: Request) {
@@ -9,19 +9,18 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     try {
-      const mac_address = body?.mac_address;
       const name = body?.name;
       const description = body?.description;
       const interval = body?.interval;
-      const userOwnsDevice = await authenticate_ownership(mac_address);
-      if (!userOwnsDevice) {
-        return simpleApiResponse("Failure", "Not authorized", 400);
-      }
-
+      const vehicle_id = Number(body?.vehicle_id);
+      const userOwnsVehicle = await authenticate_vehicle_ownership(vehicle_id);
+        if (!userOwnsVehicle) {
+          return simpleApiResponse("Failure", "Not authorized", 400);
+        }
       // const image_url = body?.image_url;
       const mainenance_procedure = await prisma.maintenanceprocedure.create({
         data: {
-          mac_address: mac_address,
+          vehicle_id: vehicle_id,
           name: name,
           ...(description && { description }),
           interval: interval,

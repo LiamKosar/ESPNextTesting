@@ -1,22 +1,22 @@
 import { simpleApiResponse } from "../../simpleApi";
 import { prisma } from "@/app/lib/prisma";
-import { authenticate_ownership } from "../../authenticate_ownership";
+import { authenticate_vehicle_ownership } from "../../authenticate_ownership";
 
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
-    const mac_address = url.searchParams.get("mac_address");
+    const vehicle_id = Number(url.searchParams.get("vehicle_id"));
 
-    if (!mac_address) {
+    if (!vehicle_id) {
       return simpleApiResponse(
         "Failure",
-        "mac_address query parameter is required",
+        "vehicle_id query parameter is required",
         400
       );
     }
 
-    const userOwnsDevice = await authenticate_ownership(mac_address);
-    if (!userOwnsDevice) {
+    const userOwnsVehicle = await authenticate_vehicle_ownership(vehicle_id);
+    if (!userOwnsVehicle) {
       return simpleApiResponse("Failure", "Not authorized", 400);
     }
 
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       const maintenance_procedures = await prisma.maintenanceprocedure.findMany(
         {
           where: {
-            mac_address: mac_address,
+            vehicle_id: vehicle_id,
           },
         }
       );

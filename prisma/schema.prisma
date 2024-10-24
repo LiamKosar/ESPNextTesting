@@ -14,32 +14,38 @@ model User {
   last_name    String?  @db.VarChar(50)
   phone_number String?  @db.VarChar(20)
   device       device[]
+  vehicle      vehicle[]
 }
 
 model device {
-  mac_address          String                 @id @db.VarChar(17)
-  version              String                 @db.VarChar(10)
-  runtime              Float?                @default(0) // Changed to Float for hours
-  user_email           String?                @default("kosar.liam@gmail.com") @db.VarChar(255)
-  date_updated         String                 @db.VarChar(50)
-  User                 User?                  @relation(fields: [user_email], references: [email], onDelete: SetDefault, onUpdate: NoAction, map: "fk_user")
-  maintenanceprocedure maintenanceprocedure[]
+  mac_address          String                @id @db.VarChar(17)
+  version              String                @db.VarChar(10)
+  runtime              Float?                @default(0)
+  user_email           String?               @default("kosar.liam@gmail.com") @db.VarChar(255)
+  date_updated         String                @db.VarChar(50)
+  User                 User?                 @relation(fields: [user_email], references: [email], onDelete: SetDefault, onUpdate: NoAction, map: "fk_user")
   vehicle              vehicle?
 }
 
 model maintenanceprocedure {
-  id               Int     @id @default(autoincrement())
-  mac_address      String  @db.VarChar(17)
-  name             String  @db.VarChar(100)
-  description      String?
-  interval         Float   // Changed to Float for hours
-  current_interval Float?  @default(0) // Changed to Float for hours
-  device           device  @relation(fields: [mac_address], references: [mac_address], onDelete: NoAction, onUpdate: NoAction, map: "fk_device")
+  id               Int      @id @default(autoincrement())
+  vehicle_id       Int
+  name             String   @db.VarChar(100)
+  description      String? 
+  interval         Float
+  current_interval Float?   @default(0)
+  vehicle          vehicle  @relation(fields: [vehicle_id], references: [vehicle_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle")
 }
 
 model vehicle {
-  mac_address String  @id @db.VarChar(17)
+  vehicle_id  Int     @id @default(autoincrement())
+  user_email  String  @db.VarChar(255)
   name        String  @db.VarChar(100)
-  image_url   String?
-  device      device  @relation(fields: [mac_address], references: [mac_address], onDelete: NoAction, onUpdate: NoAction, map: "fk_device")
+  mac_address String? @unique @db.VarChar(17)
+  runtime     Float?  @default(0)
+  image_url   String? @db.VarChar(255)
+  date_updated String                @db.VarChar(50)
+  device      device? @relation(fields: [mac_address], references: [mac_address], onDelete: NoAction, onUpdate: NoAction, map: "fk_device")
+  User        User    @relation(fields: [user_email], references: [email], onDelete: SetDefault, onUpdate: NoAction, map: "fk_user")
+  maintenanceprocedure maintenanceprocedure[]
 }

@@ -13,14 +13,17 @@ export async function POST(request: Request) {
       // Try to add the provided email to the vercel postgresql database
 
       try {
-        const mac_address = body?.macAddr;
         const name = body?.name;
+        const user_email = body?.user_email;
+        const dateTime = new Date().toUTCString();
+
         // const image_url = body?.image_url;
         const vehicle = await prisma.vehicle.create({
           data: {
-            mac_address: mac_address,
             name: name,
-            image_url: "empty"
+            image_url: "empty",
+            user_email: user_email,
+            date_updated: dateTime
           },
         });
         return simpleApiResponse("Success", "Device inserted", 200);

@@ -1,6 +1,5 @@
-import { simpleApiResponse } from "../simpleApi";
 import { prisma } from "@/app/lib/prisma";
-
+import { simpleResponses } from "../simpleApi";
 // To handle a POST request to /api
 export async function POST(request: Request) {
   try {
@@ -22,15 +21,15 @@ export async function POST(request: Request) {
             date_updated: dateTime
           },
         });
-        return simpleApiResponse("Success", "Device created", 200);
+        return simpleResponses.simpleApiResponse("Success", "Device created", 200);
       } catch (error) {
         console.log("hi");
-        return simpleApiResponse("Failure", "Database Error", 400);
+        return simpleResponses.simpleApiResponse("Failure", "Database Error", 400);
       }
     } else {
-      return simpleApiResponse("Failure", "Failed Authorization", 400);
+      return simpleResponses.simpleApiResponse("Failure", "Failed Authorization", 400);
     }
   } catch (error) {
-    return simpleApiResponse("Failure", "Invalid JSON body", 400);
+    return simpleResponses.simpleApiResponse("Failure", "Invalid JSON body", 400);
   }
 }

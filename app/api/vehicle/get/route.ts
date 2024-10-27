@@ -3,7 +3,7 @@ import {
   get_vehicles_api,
 } from "../../prisma/prisma_api_functions";
 import { RequestType } from "@/app/lib/types";
-import { vehicle_any_wrapper, vehicle_read_update_delete_wrapper } from "../../prisma/prisma_function_wrappers";
+import { vehicle_any_wrapper, vehicle_read_update_delete_wrapper } from "../../prisma/prisma_api_function_wrappers";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);

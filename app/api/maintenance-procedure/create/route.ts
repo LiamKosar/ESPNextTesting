@@ -2,7 +2,7 @@ import {
   crudDatabaseCall,
   create_maintenance_procedure_api,
 } from "../../prisma/prisma_api_functions";
-import { vehicle_read_update_delete_wrapper } from "../../prisma/prisma_function_wrappers";
+import { vehicle_read_update_delete_wrapper } from "../../prisma/prisma_api_function_wrappers";
 
 import { RequestType } from "@/app/lib/types";
 

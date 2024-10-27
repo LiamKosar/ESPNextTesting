@@ -1,7 +1,7 @@
-import { simpleApiResponse } from "../simpleApi";
 import { NextResponse } from "next/server";
 import { RESPONSE_DATA } from "../../lib/constants";
 import { prisma } from "@/app/lib/prisma";
+import { simpleResponses } from "../simpleApi";
 
 import {
   PrismaApiQueryFunction,
@@ -24,11 +24,7 @@ export const vehicle_read_update_delete_wrapper = async (
   }
 
   if (vehicle_id == null) {
-    return simpleApiResponse(
-      RESPONSE_DATA.FAILURE_MSG,
-      RESPONSE_DATA.BAD_REQUEST,
-      RESPONSE_DATA.BAD_REQUEST_CODE
-    );
+    return simpleResponses.simpleBaqRequestApiResponse();
   }
 
   const user_owns_vehicle = await authenticate_vehicle_ownership(
@@ -37,11 +33,7 @@ export const vehicle_read_update_delete_wrapper = async (
   );
 
   if (!user_owns_vehicle) {
-    return simpleApiResponse(
-      RESPONSE_DATA.FAILURE_MSG,
-      RESPONSE_DATA.FORBIDDEN,
-      RESPONSE_DATA.FORBIDDEN_CODE
-    );
+    return simpleResponses.simpleForbiddenRequestApiResponse();
   }
 
   return await prisma_function(data);
@@ -53,4 +45,3 @@ export const vehicle_any_wrapper = async (
 ): Promise<NextResponse> => {
   return await prisma_function(data);
 };
-

@@ -20,6 +20,13 @@ const simpleBaqRequestApiResponse = (): NextResponse => {
   );
 };
 
+const simpleForbiddenRequestApiResponse = (): NextResponse => {
+    return NextResponse.json(
+      { message: RESPONSE_DATA.FORBIDDEN },
+      { status: RESPONSE_DATA.FORBIDDEN_CODE }
+    );
+  };
+
 const simpleUnauthorizedRequestApiResponse = (): NextResponse => {
   return NextResponse.json(
     { message: RESPONSE_DATA.UNAUTHORIZED },
@@ -76,4 +83,5 @@ export const simpleResponses = {
   simpleEntryDeletedApiResponse: simpleEntryDeletedApiResponse,
   simpleEntryUpdatedApiResponse: simpleEntryUpdatedApiResponse,
   simpleGetApiResponse: simpleGetApiResponse,
+  simpleForbiddenRequestApiResponse: simpleForbiddenRequestApiResponse
 };

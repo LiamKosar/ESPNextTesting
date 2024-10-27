@@ -34,7 +34,7 @@ model maintenanceprocedure {
   description      String? 
   interval         Float
   current_interval Float?   @default(0)
-  vehicle          vehicle  @relation(fields: [vehicle_id], references: [vehicle_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle")
+  vehicle          vehicle  @relation(fields: [vehicle_id], references: [vehicle_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vehicle")
 }
 
 model vehicle {

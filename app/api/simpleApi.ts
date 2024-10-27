@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import { RESPONSE_DATA } from "../lib/constants";
 import { PrismaApiPostResponse, PrismaApiGetResponse } from "../lib/types";
 
-function simpleApiResponse(
-  message: string,
-  data: string,
-  status: number
-): NextResponse {
-  return NextResponse.json(
-    { message: message, data: data },
-    { status: status }
-  );
-}
+// function simpleApiResponse(
+//   message: string,
+//   data: string,
+//   status: number
+// ): NextResponse {
+//   return NextResponse.json(
+//     { message: message, data: data },
+//     { status: status }
+//   );
+// }
 
 const simpleBaqRequestApiResponse = (): NextResponse => {
   return NextResponse.json(
@@ -68,7 +68,7 @@ const simpleGetApiResponse: PrismaApiGetResponse = (
 };
 
 export const simpleResponses = {
-  simpleApiResponse: simpleApiResponse,
+//   simpleApiResponse: simpleApiResponse,
   simpleBaqRequestApiResponse: simpleBaqRequestApiResponse,
   simpleUnauthorizedRequestApiResponse: simpleUnauthorizedRequestApiResponse,
   simpleEntryCreatedApiResponse: simpleEntryCreatedApiResponse,

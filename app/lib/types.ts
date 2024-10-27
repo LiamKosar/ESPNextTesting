@@ -6,23 +6,25 @@ export enum RequestType {
     GET
 }
 
-export enum PrismaFunctionStatus {
-    MAINTENANCE_PROCEDURE_CREATED_SUCCESS,
-    MAINTENANCE_PROCEDURE_CREATED_FAILURE,
-    MAINTENANCE_PROCEDURE_UPDATED_SUCCESS,
-    MAINTENANCE_PROCEDURE_UPDATED_FAILURE,
-    MAINTENANCE_PROCEDURE_DELETED_SUCCESS,
-    MAINTENANCE_PROCEDURE_DELETED_FAILURE,
-
-}
-
-export type PrismaQueryFunction = (data: PrismaQueryFunctionData) => Promise<NextResponse>;
-export type PrismaQueryFunctionWrapper = (data: PrismaQueryFunctionData, prisma_function: PrismaQueryFunction) => Promise<NextResponse>;
+export type PrismaQueryFunction = (data: QueryParameters) => Promise<void | string>;
+export type PrismaApiQueryFunction = (data: PrismaApiQueryFunctionData) => Promise<NextResponse>;
+export type PrismaApiQueryFunctionWrapper = (data: PrismaApiQueryFunctionData, prisma_function: PrismaApiQueryFunction) => Promise<NextResponse>;
+export type PrismaApiPostResponse = () => NextResponse;
+export type PrismaApiGetResponse = (data: string) => NextResponse;
 
 
-export type PrismaQueryFunctionData = {
+export type PrismaApiQueryFunctionData = {
     request: Request,
     request_type: RequestType,
     user_email: string,
     body: any
 }
+
+export type FindQueryParameters = {
+    [key: string]: boolean;
+};
+
+export type QueryParameters = {
+    [key: string]: any;
+};
+

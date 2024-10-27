@@ -1,19 +1,19 @@
-import { simpleApiResponse } from "./simpleApi";
+import { simpleApiResponse } from "../simpleApi";
 import { NextResponse } from "next/server";
-import { RESPONSE_DATA } from "../lib/constants";
+import { RESPONSE_DATA } from "../../lib/constants";
 import { prisma } from "@/app/lib/prisma";
 
 import {
-  PrismaQueryFunction,
-  PrismaQueryFunctionData,
-  PrismaQueryFunctionWrapper,
+  PrismaApiQueryFunction,
+  PrismaApiQueryFunctionData,
+  PrismaApiQueryFunctionWrapper,
   RequestType,
-} from "../lib/types";
+} from "../../lib/types";
 import { authenticate_vehicle_ownership } from "./prisma_api_functions";
 
 export const vehicle_read_update_delete_wrapper = async (
-  data: PrismaQueryFunctionData,
-  prisma_function: PrismaQueryFunction
+  data: PrismaApiQueryFunctionData,
+  prisma_function: PrismaApiQueryFunction
 ): Promise<NextResponse> => {
   let vehicle_id: number;
   if (data.request_type == RequestType.GET) {
@@ -48,10 +48,9 @@ export const vehicle_read_update_delete_wrapper = async (
 };
 
 export const vehicle_any_wrapper = async (
-  data: PrismaQueryFunctionData,
-  prisma_function: PrismaQueryFunction
+  data: PrismaApiQueryFunctionData,
+  prisma_function: PrismaApiQueryFunction
 ): Promise<NextResponse> => {
-  console.log("hie");
   return await prisma_function(data);
 };
 

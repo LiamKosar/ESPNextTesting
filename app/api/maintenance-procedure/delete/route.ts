@@ -5,7 +5,6 @@ import {
 import { RequestType } from "@/app/lib/types";
 import { vehicle_read_update_delete_wrapper } from "../../prisma/prisma_api_function_wrappers";
 
-// To handle a POST request to /api
 export async function POST(request: Request) {
   return await crudDatabaseCall(
     request,

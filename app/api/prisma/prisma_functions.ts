@@ -1,7 +1,15 @@
 import { prisma } from "@/app/lib/prisma";
 import { QueryParameters, PrismaQueryFunction } from "../../lib/types";
 
-// Create a new maintenance procedure
+/**
+ * Creates a new maintenance procedure using the specified query_params
+ * vehicle_id: required
+ * name: required
+ * interval: required
+ * description: not required
+ * current_interval: not required
+ * @param query_params
+ */
 export const create_maintenance_procedure: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
@@ -20,7 +28,11 @@ export const create_maintenance_procedure: PrismaQueryFunction = async (
   });
 };
 
-// Delete a maintenance procedure
+/**
+ * Deletes a maintenance_procedure using the specified query_params
+ * id: required
+ * @param query_params 
+ */
 export const delete_maintenance_procedure: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
@@ -31,7 +43,15 @@ export const delete_maintenance_procedure: PrismaQueryFunction = async (
   });
 };
 
-// Update an existing maintenance procedure
+/**
+ * Updates maintenance procedure using the specified query_params
+ * id: required
+ * name: not required
+ * interval: not required
+ * description: not required
+ * current_interval: not required
+ * @param query_params
+ */
 export const update_maintenance_procedure: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
@@ -52,7 +72,15 @@ export const update_maintenance_procedure: PrismaQueryFunction = async (
   });
 };
 
-// Retrieve maintenance procedures
+/**
+ * Gets one/many maintenance procedures
+ * vehicle_id: required
+ * id: not required
+ * If id is specified, only 1 maintenance procedure will be returned
+ * Otherwise, all maintenance procedures associated with the specified vehicle will be returned
+ * @param query_params
+ * @returns string object with 1 or more maintenance procedure
+ */
 export const get_maintenance_procedures: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<string> => {
@@ -66,7 +94,16 @@ export const get_maintenance_procedures: PrismaQueryFunction = async (
   return JSON.stringify(maintenance_procedures);
 };
 
-// Create a new vehicle
+/**
+ * Creates a new vehicle using the specified query_params
+ * name: required
+ * user_email: required
+ * date_updated: required
+ * image_url: not required
+ * runtime: not required
+ * mac_address: not required
+ * @param query_params
+ */
 export const create_vehicle: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
@@ -87,7 +124,17 @@ export const create_vehicle: PrismaQueryFunction = async (
   });
 };
 
-// Update an existing vehicle
+/**
+ * Updated a vehicle using the specified query_params
+ * vehicle_id: required
+ * date_updated: required
+ * name: not required
+ * user_email: not required
+ * image_url: not required
+ * runtime: not required
+ * mac_address: not required
+ * @param query_params
+ */
 export const update_vehicle: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
@@ -113,7 +160,11 @@ export const update_vehicle: PrismaQueryFunction = async (
   });
 };
 
-// Delete a vehicle
+/**
+ * Deletes the specified vehicle
+ * vehicle_id: required
+ * @param query_params 
+ */
 export const delete_vehicle: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
@@ -124,7 +175,15 @@ export const delete_vehicle: PrismaQueryFunction = async (
   });
 };
 
-// Retrieve vehicles
+/**
+ * Gets one/many vehicles
+ * user_email: required
+ * vehicle_id: not required required
+ * If vehicle_id is specified, only 1 vehicle will be returned
+ * Otherwise, all vehicles associated with the specified user_email will be returned
+ * @param query_params
+ * @returns string object with 1 or more vehicle
+ */
 export const get_vehicles: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<string> => {

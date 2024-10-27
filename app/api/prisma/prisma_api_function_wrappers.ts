@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { RESPONSE_DATA } from "../../lib/constants";
-import { prisma } from "@/app/lib/prisma";
 import { simpleResponses } from "../simpleApi";
 
 import {
@@ -11,7 +9,17 @@ import {
 } from "../../lib/types";
 import { authenticate_vehicle_ownership } from "./prisma_api_functions";
 
-export const vehicle_read_update_delete_wrapper = async (
+/**
+ * Handles ANY user-facing operations that read/update/delete anything related to 
+ * the vehicle table. This includes maintenance_procedures, because they are associated
+ * with a specific vehicle
+ * The purpose of this specific wrapper is to check if the current user OWNS the vehicle the operation
+ * is being done on
+ * @param data the data to be passed on to the PrismaApiQueryFunction
+ * @param prisma_function The PrismaApiQueryFunction the wrapper will call
+ * @returns Api response based on the data
+ */
+export const vehicle_read_update_delete_wrapper: PrismaApiQueryFunctionWrapper = async (
   data: PrismaApiQueryFunctionData,
   prisma_function: PrismaApiQueryFunction
 ): Promise<NextResponse> => {
@@ -39,7 +47,13 @@ export const vehicle_read_update_delete_wrapper = async (
   return await prisma_function(data);
 };
 
-export const vehicle_any_wrapper = async (
+/**
+ * Allows any data to pass through, no user authentication at all.
+ * @param data The data to be passed to the PrismaApiQueryFunction
+ * @param prisma_function The PrismaApiQueryFunction the wrapper will call
+ * @returns Api response based on the data
+ */
+export const vehicle_any_wrapper: PrismaApiQueryFunctionWrapper = async (
   data: PrismaApiQueryFunctionData,
   prisma_function: PrismaApiQueryFunction
 ): Promise<NextResponse> => {

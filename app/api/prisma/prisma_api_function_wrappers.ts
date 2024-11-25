@@ -7,7 +7,7 @@ import {
   PrismaApiQueryFunctionWrapper,
   RequestType,
 } from "../../lib/types";
-import { authenticate_vehicle_ownership } from "./prisma_api_functions";
+import { authenticate_vehicle_ownership, authenticate_device_ownership } from "./prisma_api_functions";
 
 /**
  * Handles ANY user-facing operations that read/update/delete anything related to 
@@ -28,17 +28,25 @@ export const vehicle_read_update_delete_wrapper: PrismaApiQueryFunctionWrapper =
     const url = new URL(data.request.url);
     vehicle_id = Number(url.searchParams.get("vehicle_id"));
   } else {
-    vehicle_id = data.body.vehicle_id;
+    vehicle_id = data.body?.vehicle_id;
   }
 
   if (vehicle_id == null) {
     return simpleResponses.simpleBaqRequestApiResponse();
   }
 
-  const user_owns_vehicle = await authenticate_vehicle_ownership(
-    vehicle_id,
-    data.user_email
-  );
+
+  let user_owns_vehicle = false;
+  
+  try {
+    user_owns_vehicle = await authenticate_vehicle_ownership(
+      vehicle_id,
+      data.user_email
+    );
+  }
+  catch(error) {
+    return simpleResponses.simpleBadGatewayApiResponse();
+  }
 
   if (!user_owns_vehicle) {
     return simpleResponses.simpleForbiddenRequestApiResponse();
@@ -59,3 +67,42 @@ export const vehicle_any_wrapper: PrismaApiQueryFunctionWrapper = async (
 ): Promise<NextResponse> => {
   return await prisma_function(data);
 };
+
+
+export const device_get_update_wrapper: PrismaApiQueryFunctionWrapper = async(
+  data: PrismaApiQueryFunctionData,
+  prisma_function: PrismaApiQueryFunction
+): Promise<NextResponse> => {
+
+
+  let mac_address: string | null;
+  if (data.request_type == RequestType.GET) {
+    const url = new URL(data.request.url);
+    mac_address = url.searchParams.get("mac_address");
+  } else {
+    mac_address = data.body?.vehicle_id;
+  }
+
+  if (mac_address == null) {
+    return simpleResponses.simpleBaqRequestApiResponse();
+  }
+
+  let user_owns_device = false;
+  
+  try {
+    user_owns_device = await authenticate_device_ownership(
+    mac_address,
+    data.user_email
+  );}
+  catch(error) {
+    return simpleResponses.simpleBadGatewayApiResponse();
+  }
+
+  if (!user_owns_device) {
+    return simpleResponses.simpleForbiddenRequestApiResponse();
+  }
+
+  return await prisma_function(data);
+};
+
+

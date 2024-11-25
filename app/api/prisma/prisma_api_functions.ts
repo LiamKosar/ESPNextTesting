@@ -20,6 +20,8 @@ import {
   get_maintenance_procedures,
   update_maintenance_procedure,
   update_vehicle,
+  update_device,
+  confirm_device_can_be_updated_by_user,
 } from "./prisma_functions";
 import { prisma } from "../../lib/prisma";
 
@@ -50,7 +52,7 @@ export const crudDatabaseCall = async (
 
   try {
     let body = null;
-    if (request_type == RequestType.POST) {
+    if (request_type === RequestType.POST) {
       body = await request.json();
     }
     const data: PrismaApiQueryFunctionData = {
@@ -158,8 +160,8 @@ const get_values_from_body_with_checks = (
 
 /**
  * Checks if the currently logged-in user owns a specific vehicle
- * @param vehicle_id 
- * @param user_email 
+ * @param vehicle_id
+ * @param user_email
  * @returns true if user owns vehicle, false otherwise
  */
 export const authenticate_vehicle_ownership = async (
@@ -345,7 +347,38 @@ export const get_vehicles_api = async (
   const query_params = {
     user_email: data.user_email,
     vehicle_id: vehicle_id,
-  };
+  };  
 
   return await handle_get_request(query_params, get_vehicles);
 };
+
+export const authenticate_device_ownership = async (
+  mac_address: string,
+  user_email: string
+): Promise<boolean> => {
+  return confirm_device_can_be_updated_by_user({
+    mac_address: mac_address,
+    user_email: user_email,
+  });
+};
+
+
+export const update_device_api = async (
+  data: PrismaApiQueryFunctionData
+): Promise<NextResponse> => {
+  const find_params: FindQueryParameters = {};
+  find_params["mac_address"] = true;
+  find_params["user_email"] = true;
+  find_params["version"] = false;
+  find_params["runtime"] = false;
+  data.body["user_email"] = data.user_email;
+  return await handle_post_request(
+    find_params,
+    data.body,
+    update_device,
+    simpleResponses.simpleEntryUpdatedApiResponse
+  );
+};
+
+
+

@@ -15,7 +15,7 @@ export enum RequestType {
  * Create/Update/Delete - Void
  * Read - String (result table)
  */
-export type PrismaQueryFunction = (data: QueryParameters) => Promise<void | string>;
+export type PrismaQueryFunction = (data: QueryParameters) => Promise<any>;
 
 /**
  * A function that specifies the necessary data for a PrismaQueryFunction.

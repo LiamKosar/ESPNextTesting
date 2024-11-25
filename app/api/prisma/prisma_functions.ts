@@ -198,3 +198,40 @@ export const get_vehicles: PrismaQueryFunction = async (
 
   return JSON.stringify(vehicles);
 };
+
+
+export const confirm_device_can_be_updated_by_user: PrismaQueryFunction = async (
+  query_params: QueryParameters
+): Promise<boolean> => {
+
+  const device = await prisma.device.findUnique({
+    where: {
+      mac_address: query_params["mac_address"],
+    }
+  });
+
+  if (device) {
+    return device.user_email === query_params["user_email"] || device.user_email === "kosar.liam@gmail.com"
+  }
+  return false;  
+}
+
+
+export const update_device: PrismaQueryFunction = async (
+  query_params: QueryParameters
+): Promise<void> => {
+  const date_updated = new Date().toUTCString();
+  await prisma.device.update({
+    where: {
+      mac_address: query_params["mac_address"],
+    },
+    data: {
+      user_email: query_params["user_email"],
+      date_updated: date_updated,
+      ...(query_params["version"] && {
+        version: query_params["version"],
+      }),
+      ...(query_params["runtime"] && { runtime: query_params["runtime"] }),
+    },
+  });
+};

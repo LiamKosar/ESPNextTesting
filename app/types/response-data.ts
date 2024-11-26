@@ -15,4 +15,13 @@ export type GetRequestResponse = {
 
 export type DashboardTabProps = {
     vehicles: Vehicle[];
-  };
+};
+
+export type MaintenanceProcedure = {
+  id: number,
+  name: string,
+  description: string | null,
+  interval: number,
+  current_interval: number,
+  vehicle_id: number
+}

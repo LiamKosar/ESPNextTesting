@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
 
 const fetcher = (url: string): Promise<GetRequestResponse> =>
   fetch(url).then((res) => res.json());
@@ -37,23 +37,42 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
   //   });
   // }
   const [openDialog, setOpenDialog] = useState<number | null>(null)
-  const vehicleToMaintenanceProcedures: Record<number, MaintenanceProcedure[]> =
-    {};
+  // const vehicleToMaintenanceProcedures: Record<number, MaintenanceProcedure[]> =
+  //   {};
 
-  vehicles.forEach((vechicle: Vehicle) => {
+  // vehicles.forEach((vechicle: Vehicle) => {
+  //   const { data, error } = useSWR<GetRequestResponse>(
+  //     `/api/maintenance-procedure/get?vehicle_id=${vechicle.vehicle_id}`,
+  //     fetcher
+  //   );
+  //   let maintenanceProcedures: MaintenanceProcedure[] | null = null;
+  //   if (data) {
+  //     maintenanceProcedures = JSON.parse(data.data);
+  //     if (maintenanceProcedures)
+  //       vehicleToMaintenanceProcedures[vechicle.vehicle_id] =
+  //         maintenanceProcedures;
+  //   }
+  // });
+  const [vehicleToMaintenanceProcedures, setVehicleToMaintenanceProcedures] = useState<
+    Record<number, MaintenanceProcedure[]>
+  >({});
+
+  vehicles.forEach((vehicle) => {
     const { data, error } = useSWR<GetRequestResponse>(
-      `/api/maintenance-procedure/get?vehicle_id=${vechicle.vehicle_id}`,
+      `/api/maintenance-procedure/get?vehicle_id=${vehicle.vehicle_id}`,
       fetcher
     );
-    let maintenanceProcedures: MaintenanceProcedure[] | null = null;
-    if (data) {
-      maintenanceProcedures = JSON.parse(data.data);
-      if (maintenanceProcedures)
-        vehicleToMaintenanceProcedures[vechicle.vehicle_id] =
-          maintenanceProcedures;
-    }
-  });
 
+    useEffect(() => {
+      if (data && !error) {
+        const maintenanceProcedures = JSON.parse(data.data);
+        setVehicleToMaintenanceProcedures((prev) => ({
+          ...prev,
+          [vehicle.vehicle_id]: maintenanceProcedures,
+        }));
+      }
+    }, [data, error, vehicle.vehicle_id]);
+  });
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       {vehicles.map((vehicle: Vehicle) => (

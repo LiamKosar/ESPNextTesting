@@ -25,3 +25,7 @@ export type MaintenanceProcedure = {
   current_interval: number,
   vehicle_id: number
 }
+
+// export type VehicleMaintenanceProcedures = {
+//   vehic
+// }

@@ -15,7 +15,6 @@ export async function POST(request: Request) {
   try {
     // Read the request body
     const body = await request.json(); // Read and parse the JSON body
-    console.log(body); // Now, this will print the parsed JSON object
 
     const contentType = request.headers.get("Content-Type");
     const authorization = request.headers.get("Authorization");

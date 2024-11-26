@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/components/Navbar";
 import { useUser } from '@auth0/nextjs-auth0/client';
 
 export default function Home() {

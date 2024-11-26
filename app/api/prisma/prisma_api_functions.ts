@@ -45,7 +45,6 @@ export const crudDatabaseCall = async (
 ): Promise<NextResponse> => {
   const session = await getSession();
   const user_email = session?.user?.email;
-
   if (user_email == null) {
     return simpleResponses.simpleUnauthorizedRequestApiResponse();
   }

@@ -8,7 +8,7 @@ import { vehicle_any_wrapper, vehicle_read_update_delete_wrapper } from "../../p
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const vehicle_id = url.searchParams.get("vehicle_id");
-
+  
   if (vehicle_id != null) {
     return await crudDatabaseCall(
       request,

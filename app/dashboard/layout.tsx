@@ -1,22 +1,25 @@
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "../globals.css";
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "A simple dashboard with tabs",
+}
 
 export default function DashboardLayout({
   children,
-  dashboardSidebar,
 }: {
-  children: React.ReactNode,
-  dashboardSidebar: React.ReactNode,
+  children: React.ReactNode
 }) {
   return (
-    // <div>
-    //   {/* <div className="-mt-2 -ml-3 ">{dashboardSidebar}</div> */}
-    //   <div>{children}</div> 
-    // </div>
-
-
-
-<main>
-  {/* <SidebarTrigger /> */}
-  {children}
-</main>
-  );
+    <html lang="en">
+      <body className={inter.className}>
+        <div className="min-h-screen bg-gray-100">
+          {children}
+        </div>
+      </body>
+    </html>
+  )
 }

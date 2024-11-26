@@ -22,7 +22,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useState, useEffect} from 'react'
-import { useVehicleMaintenanceProcedures } from "../custom-hooks/hook";
 
 const fetcher = (url: string): Promise<GetRequestResponse> =>
   fetch(url).then((res) => res.json());
@@ -54,7 +53,24 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
   //         maintenanceProcedures;
   //   }
   // });
-  const vehicleToMaintenanceProcedures = useVehicleMaintenanceProcedures(vehicles);
+  const [vehicleToMaintenanceProcedures, setVehicleToMaintenanceProcedures] = useState<
+  Record<number, MaintenanceProcedure[]>
+>({});
+
+// Fetch all maintenance procedures
+useEffect(() => {
+  vehicles.forEach((vehicle) => {
+    fetch(`/api/maintenance-procedure/get?vehicle_id=${vehicle.vehicle_id}`)
+      .then((response) => response.json())
+      .then((data: GetRequestResponse) => {
+        const maintenanceProcedures = JSON.parse(data.data);
+        setVehicleToMaintenanceProcedures((prev) => ({
+          ...prev,
+          [vehicle.vehicle_id]: maintenanceProcedures,
+        }));
+      });
+  });
+}, [vehicles]);
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       {vehicles.map((vehicle: Vehicle) => (

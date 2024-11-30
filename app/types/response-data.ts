@@ -6,6 +6,9 @@ export type Vehicle = {
     runtime: number;
     image_url: string | null;
     date_updated: string;
+    num_red?: number,
+    num_yellow?: number,
+    num_green?: number
   };
 
 export type GetRequestResponse = {
@@ -24,6 +27,7 @@ export type MaintenanceProcedure = {
   interval: number,
   current_interval: number,
   vehicle_id: number
+  percentage?: number
 }
 
 // export type VehicleMaintenanceProcedures = {

@@ -42,9 +42,9 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
   }
 
   const calcColorFromPercentage = (percentage: number): string => {
-    if (percentage < 50) return 'green';
-    else if (50 <= percentage && percentage < 85) return 'yellow'
-    else return 'red'
+    if (percentage < 50) return '#69ff5c';
+    else if (50 <= percentage && percentage < 85) return '#ffff69'
+    else return '#f56c6c'
   }
 
   // Fetch all maintenance procedures
@@ -54,10 +54,27 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
         .then((response) => response.json())
         .then((data: GetRequestResponse) => {
           const maintenanceProcedures = JSON.parse(data.data);
+
+          let procedures = maintenanceProcedures;
+          procedures.forEach((procedure: MaintenanceProcedure) => {
+            procedure.percentage = (procedure.current_interval/procedure.interval) * 100;
+          });
+          procedures.sort((a: MaintenanceProcedure, b: MaintenanceProcedure) => {
+            if (b.percentage && a.percentage) {
+            return b.percentage - a.percentage;
+          }
+            return -1;
+          });
+
+          vehicle.num_green = procedures.filter((p: MaintenanceProcedure) => ((p.percentage || 0) < 50)).length
+          vehicle.num_yellow = procedures.filter((p: MaintenanceProcedure) => ((p.percentage || 0) >= 50 && (p.percentage || 0) < 85)).length
+          vehicle.num_red = procedures.filter((p: MaintenanceProcedure) => ((p.percentage || 0) >= 85)).length
           setVehicleToMaintenanceProcedures((prev) => ({
             ...prev,
-            [vehicle.vehicle_id]: maintenanceProcedures,
+            [vehicle.vehicle_id]: procedures,
           }));
+
+
         });
     });
   }, [vehicles]);
@@ -71,6 +88,7 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
               <CardTitle className="text-sm font-medium">
                 {vehicle.name}
               </CardTitle>
+              <div></div>
               <CircularHighlightButton
                 callback={updateSelectedItem}
                 data={vehicle}
@@ -81,11 +99,25 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
               ></CircularHighlightButton>
             </CardHeader>
             <CardContent>
-              <div className="text-lg font-bold">{vehicle.runtime} hours</div>
+
+                <div><div className="text-lg font-bold">{vehicle.runtime} hours</div>
               <p className="text-sm text-muted-foreground">
                 Last updated: {new Date(vehicle.date_updated).toLocaleString()}
-                {/* Last updated: {vehicle.date_updated} */}
-              </p>
+              </p></div>
+              <div className="flex flex-wrap gap-4 mt-2">{vehicle.num_red ? <div className="flex flex-wrap gap-2">
+                <div className="w-4 h-4 self-center" style={{borderRadius: "50%", backgroundColor: calcColorFromPercentage(100)}}></div>
+                <p className="text-sm">{vehicle.num_red} top priority</p>
+              </div> :<> </>}
+              {vehicle.num_yellow ? <div className="flex flex-wrap gap-2">
+                <div className="w-4 h-4 self-center" style={{borderRadius: "50%", backgroundColor: calcColorFromPercentage(70)}}></div>
+                <p className="text-sm">{vehicle.num_yellow} medium priority</p>
+              </div> :<> </>}
+              {vehicle.num_green ? <div className="flex flex-wrap gap-2">
+                <div className="w-4 h-4 self-center" style={{borderRadius: "50%", backgroundColor: calcColorFromPercentage(0)}}></div>
+                <p className="text-sm">{vehicle.num_green} low priority</p>
+              </div> :<> </>}
+              </div>
+              
             </CardContent>
           </Card>
         ))}
@@ -95,7 +127,7 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
         {selectedItem === null ? (
           <h1>Nothing selected</h1>
         ) : (
-          <Card className="p-1">
+          <Card className="p-1 sticky">
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-lg font-medium">
                 {selectedItem.name}
@@ -129,10 +161,10 @@ export function DashboardTab({ vehicles }: DashboardTabProps) {
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>Current: {procedure.current_interval}</span>
-                          <span>Target: {procedure.interval}</span>
+                          <span>Current: <span className="font-bold">{procedure.current_interval}</span></span>
+                          <span>Interval: <span className="font-bold">{procedure.interval}</span></span>
                         </div>
-                        <Progress value={procedure.current_interval/procedure.interval * 100}  bgColor={calcColorFromPercentage(procedure.current_interval/procedure.interval * 100)} className="w-full" />
+                        <Progress value={procedure.percentage}  bgColor={calcColorFromPercentage(procedure.percentage || 0)} className="w-full" />
                       </div>
                     </CardContent>
                   </Card>

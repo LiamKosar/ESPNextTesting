@@ -5,7 +5,8 @@ import { DashboardTab } from "./dashboard-tab"
 import { ProfileTab } from "./profile-tab"
 import useSWR from 'swr'
 import { Vehicle, GetRequestResponse } from "../types/response-data"
-
+import { Card } from "@/components/ui/card"
+import LoadingCard from "./loading-card"
 const fetcher = (url: string): Promise<GetRequestResponse> =>
   fetch(url).then((res) => res.json());
 
@@ -22,12 +23,12 @@ export function DashboardTabs() {
   
   return (
     <Tabs defaultValue="dashboard" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-6">
         <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
         <TabsTrigger value="profile">My Profile</TabsTrigger>
       </TabsList>
       <TabsContent value="dashboard">
-       {vehicles != null ? <DashboardTab vehicles={vehicles}/> : <></>} 
+       {vehicles != null ?<DashboardTab vehicles={vehicles}/>: <LoadingCard />} 
       </TabsContent>
       <TabsContent value="profile">
         <ProfileTab />

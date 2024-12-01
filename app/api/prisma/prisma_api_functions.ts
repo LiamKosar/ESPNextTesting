@@ -22,6 +22,7 @@ import {
   update_vehicle,
   update_device,
   confirm_device_can_be_updated_by_user,
+  get_devices,
 } from "./prisma_functions";
 import { prisma } from "../../lib/prisma";
 
@@ -349,6 +350,19 @@ export const get_vehicles_api = async (
   };  
 
   return await handle_get_request(query_params, get_vehicles);
+};
+
+export const get_devices_api = async (
+  data: PrismaApiQueryFunctionData
+): Promise<NextResponse> => {
+  const url = new URL(data.request.url);
+  const mac_address = Number(url.searchParams.get("mac_address"));
+  const query_params = {
+    user_email: data.user_email,
+    mac_address: mac_address,
+  };  
+
+  return await handle_get_request(query_params, get_devices);
 };
 
 export const authenticate_device_ownership = async (

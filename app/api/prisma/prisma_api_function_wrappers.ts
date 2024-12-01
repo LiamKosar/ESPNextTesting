@@ -68,6 +68,14 @@ export const vehicle_any_wrapper: PrismaApiQueryFunctionWrapper = async (
   return await prisma_function(data);
 };
 
+export const device_any_wrapper: PrismaApiQueryFunctionWrapper = async (
+  data: PrismaApiQueryFunctionData,
+  prisma_function: PrismaApiQueryFunction
+): Promise<NextResponse> => {
+  return await prisma_function(data);
+};
+
+
 
 export const device_get_update_wrapper: PrismaApiQueryFunctionWrapper = async(
   data: PrismaApiQueryFunctionData,
@@ -104,5 +112,7 @@ export const device_get_update_wrapper: PrismaApiQueryFunctionWrapper = async(
 
   return await prisma_function(data);
 };
+
+
 
 

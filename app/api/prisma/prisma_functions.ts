@@ -199,6 +199,21 @@ export const get_vehicles: PrismaQueryFunction = async (
   return JSON.stringify(vehicles);
 };
 
+export const get_devices: PrismaQueryFunction = async (
+  query_params: QueryParameters
+): Promise<string> => {
+  const devices = await prisma.device.findMany({
+    where: {
+      user_email: query_params["user_email"],
+      ...(query_params["mac_address"] && {
+        mac_address: query_params["mac_address"],
+      }),
+    },
+  });
+
+  return JSON.stringify(devices);
+};
+
 
 export const confirm_device_can_be_updated_by_user: PrismaQueryFunction = async (
   query_params: QueryParameters

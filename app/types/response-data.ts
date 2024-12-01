@@ -16,10 +16,6 @@ export type GetRequestResponse = {
     data: string
 }
 
-export type DashboardTabProps = {
-    vehicles: Vehicle[];
-};
-
 export type MaintenanceProcedure = {
   id: number,
   name: string,
@@ -30,6 +26,19 @@ export type MaintenanceProcedure = {
   percentage?: number
 }
 
+
+export type Device = {
+  mac_address: string,
+  version: string,
+  runtime: number,
+  user_email: string,
+  date_updated: string
+}
+
+export type ItemWrapper = {
+  type: String,
+  item: any
+}
 // export type VehicleMaintenanceProcedures = {
 //   vehic
 // }

@@ -3,6 +3,8 @@ import { calcColorFromPercentage } from "./dashboard-tab";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CircularHighlightButton from "./circle-button";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator";
 
 type VehicleCardProps = {
   vehicle: Vehicle;
@@ -35,7 +37,10 @@ export function VehicleCard({
         )}
       >
         <CardTitle className="text-sm font-medium">{vehicle.name}</CardTitle>
-        <div></div>
+        <div>
+          {/* <Badge variant={"default"}> Meow meow</Badge> */}
+          
+        </div>
         {selectedItem ? (
           <CircularHighlightButton
             callback={callback}
@@ -46,14 +51,19 @@ export function VehicleCard({
           <></>
         )}
       </CardHeader>
+
       <CardContent>
-        <div>
+        <div className="mb-2">
           <div className="text-lg font-bold">{vehicle.runtime} hours</div>
           <p className="text-sm text-muted-foreground">
             Last updated: {new Date(vehicle.date_updated).toLocaleString()}
           </p>
+
         </div>
+        
+        <Separator className="w-3/4 border-t-2" orientation="horizontal"></Separator>
         <div className="flex flex-wrap gap-4 mt-2">
+          
           {vehicle.num_red ? (
             <div className="flex flex-wrap gap-2">
               <div

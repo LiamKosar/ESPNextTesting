@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button"
 import { Minus } from 'lucide-react'
 
 interface DeleteButtonProps {
-  onClick?: () => undefined
+  onClick: () => undefined
 }
 
-export default function DeleteButton({ onClick = ()=>{} }: DeleteButtonProps) {
+export default function DeleteButton({ onClick}: DeleteButtonProps) {
   return (
     <Button
       variant="destructive"

@@ -121,7 +121,7 @@ export function VehicleDetails({
             ))}
           </CollapsibleContent>
         </Collapsible>
-        <Separator orientation="horizontal"></Separator>
+        <Separator className="border-t-2" orientation="horizontal"></Separator>
         {connectedDevice ? (
           <div className="relative my-4">
             <span className="absolute flex justify-end p-4 top-0 right-0"><DeleteButton onClick={() => deleteVehichleDeviceConnection()}></DeleteButton></span>

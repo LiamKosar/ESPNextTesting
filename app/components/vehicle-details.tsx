@@ -1,41 +1,92 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MaintenanceProcedure, Vehicle } from "../types/response-data";
-import CircularHighlightButton from "./circle-button";
+import { Device, ItemWrapper, MaintenanceProcedure, Vehicle } from "../types/response-data";
 import { calcColorFromPercentage } from "./dashboard-tab";
 import { Progress } from "@/components/ui/progress";
+import { DeviceCard } from "./device-card";
+import { toast } from "sonner"
+
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@radix-ui/react-collapsible";
+import { ChevronDown, Info } from "lucide-react";
+import { SearchBox, SearchBoxItem } from "./search-box";
+import React, { useState } from "react";
+import DeleteButton from "./delete-button";
 
 type VehicleDetailsProps = {
-    vehicle: Vehicle,
-    maintenanceProcedures: MaintenanceProcedure[]
-}
+  vehicle: Vehicle;
+  maintenanceProcedures: MaintenanceProcedure[];
+  connectedDevice?: Device;
+  unnoccupiedDevices: Device[];
+  callback: (item: ItemWrapper) => Promise<void>;
+};
 
-export function VehicleDetails({vehicle, maintenanceProcedures}: VehicleDetailsProps) {
+export function VehicleDetails({
+  vehicle,
+  maintenanceProcedures,
+  connectedDevice,
+  unnoccupiedDevices, 
+  callback,
+}: VehicleDetailsProps) {
+
+
+ 
+
+  const mapDevicesToSearchBoxItems = (): SearchBoxItem<Device>[] => {
+    const result: SearchBoxItem<Device>[] = [];
+
+    unnoccupiedDevices.forEach((device) => {
+      result.push({
+        name: device.mac_address,
+        value: device.mac_address,
+        item: device,
+      });
+    });
+
+    return result;
+  };
+
+  const updateVehicleDeviceCallback = (item: Device): undefined => {
+    vehicle.mac_address = item.mac_address;
+    callback({type: "vehicle", item: vehicle})
+  };
+
+  const deleteVehichleDeviceConnection = (): undefined => {
+    vehicle.mac_address = "delete";
+    callback({type: "Device", item: vehicle})
+    toast("Device Disconnected", {
+      description: `You have successfully disconnected ${vehicle.name} from a device`
+    })
+  }
+
   return (
     <Card className="p-1 sticky">
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle className="text-lg font-medium">
-          {vehicle.name}
-        </CardTitle>
+        <CardTitle className="text-lg font-medium">{vehicle.name}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Last updated:{" "}
-          {new Date(vehicle.date_updated).toLocaleDateString()}
-          {/* Last updated: {vehicle.date_updated} */}
+          Last updated: {new Date(vehicle.date_updated).toLocaleDateString()}
         </p>
       </CardHeader>
       <CardContent>
         <div className="text-md font-bold mb-2">
           Total Runtime: {vehicle.runtime}hrs
         </div>
-        <div className="text-blue-500">Maintenance Procedures</div>
-        <div className="mt-2 grid gap-4 md:grid-cols-2 lg:grid-cols-2">
-          {maintenanceProcedures.map(
-            (procedure: MaintenanceProcedure) => (
-              <Card key={procedure.id} className="bg-muted">
+
+        <Collapsible defaultOpen={true}>
+          <CollapsibleTrigger className="flex items-center text-sm text-blue-500 hover:text-blue-700">
+            Maintenance Procedures
+            <ChevronDown className="h-4 w-4 ml-1" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2 grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+            {maintenanceProcedures?.map((procedure: MaintenanceProcedure) => (
+              <Card key={procedure.id} className="bg-muted p-0">
                 <CardHeader className="text-center pb-2">
                   <CardTitle>{procedure.name}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="bg-card p-3 rounded-md">
+                <CardContent className="space-y-2">
+                  <div className="bg-card p-2 rounded-md">
                     <p className="text-sm">{procedure.description}</p>
                   </div>
                   <div className="space-y-2">
@@ -63,10 +114,27 @@ export function VehicleDetails({vehicle, maintenanceProcedures}: VehicleDetailsP
                   </div>
                 </CardContent>
               </Card>
-            )
-          )}
-        </div>
-        {/* </Collapsible> */}
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+
+        {connectedDevice ? (
+          <div className="relative mb-4 mt-5">
+            <span className="absolute flex justify-end p-4 top-0 right-0"><DeleteButton onClick={() => deleteVehichleDeviceConnection()}></DeleteButton></span>
+            <DeviceCard hover={false} device={connectedDevice}></DeviceCard>
+          </div>
+        ) : (
+          <div className="justify-items-center justify-center mt-3 mb-1 py-2 ">
+            <div className="self-center">
+            <SearchBox<Device>
+              callback={updateVehicleDeviceCallback}
+              items={mapDevicesToSearchBoxItems()}
+              name="Connect a device..."
+              searchFieldDefault="Search devices..."
+
+            ></SearchBox></div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

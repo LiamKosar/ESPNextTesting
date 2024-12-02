@@ -8,13 +8,12 @@ import {
   ItemWrapper,
 } from "../types/response-data";
 import { useState, useEffect } from "react";
-import CircularHighlightButton from "./circle-button";
-import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { VehicleDeviceCardList } from "./vehicle-card-list";
 import { VehicleDetails } from "./vehicle-details";
 import { DeviceCardList } from "./device-card-list";
 import { DeviceDetails } from "./device-details";
+import { SearchBox } from "./search-box";
 
 const fetcher = (url: string): Promise<GetRequestResponse> =>
   fetch(url).then((res) => res.json());
@@ -31,12 +30,46 @@ export const calcColorFromPercentage = (percentage: number): string => {
 }
 
 
+const updateVehicleMacAddress = async (vehicle_id: number, mac_address: string) => {
+
+  const body = {
+    vehicle_id: vehicle_id,
+    mac_address: mac_address,
+  };
+
+  try {
+    const response = await fetch("/api/vehicle/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    } else {
+      alert("Error updating vehicle.");
+      console.error(await response.text());
+    }
+  } catch (error) {
+    console.error("Request failed:", error);
+  }
+};
+
+
 
 export function DashboardTab({ vehicles, devices }: DashboardTabProps) {
   const [openDialog, setOpenDialog] = useState<number | null>(null);
   const [vehicleToMaintenanceProcedures, setVehicleToMaintenanceProcedures] =
   useState<Record<number, MaintenanceProcedure[]>>({});
   let item = localStorage.getItem('selectedItem');
+
+  const [connectedDevice, setConnectedDevice] = useState<Device | undefined>(
+  );
+
+
   const [selectedItem, setSelectedItem] = useState<ItemWrapper>({type: "empty", item: null});
 
 
@@ -50,7 +83,19 @@ export function DashboardTab({ vehicles, devices }: DashboardTabProps) {
     return vehicles.find(vehicle => vehicle.mac_address === mac_address);
   }
 
-  
+  const findDevice = (mac_address: string): Device | undefined => {
+    let device= devices.find(devices => devices.mac_address === mac_address);
+    console.log("device", device)
+    return device;
+  }
+
+  const getUnnoccupiedDevices = (): Device[] => {
+    return devices.filter((device) => {
+        const matchingVehicle = findVehicle(device.mac_address);
+        return matchingVehicle == null;
+    })
+  }
+
 
   // Fetch all maintenance procedures
   useEffect(() => {
@@ -103,16 +148,14 @@ export function DashboardTab({ vehicles, devices }: DashboardTabProps) {
     </Card>
       </div>
       
-
-
-
-      
       <div>
         {selectedItem.type === "empty" ? (
           <h1>Nothing selected</h1>
         ) : 
-
-        selectedItem.type === "vehicle" ? <VehicleDetails vehicle={selectedItem.item} maintenanceProcedures={vehicleToMaintenanceProcedures[selectedItem.item.vehicle_id]}></VehicleDetails>
+        selectedItem.type === "vehicle" ? <VehicleDetails callback={async (item: ItemWrapper)=> {
+          updateSelectedItem(item);
+          await updateVehicleMacAddress(item.item.vehicle_id, item.item.mac_address);
+        }} unnoccupiedDevices={getUnnoccupiedDevices()}  connectedDevice={findDevice(selectedItem.item.mac_address)} vehicle={selectedItem.item} maintenanceProcedures={vehicleToMaintenanceProcedures[selectedItem.item.vehicle_id]}></VehicleDetails>
         : <DeviceDetails device={selectedItem.item} vehicle={findVehicle(selectedItem.item.mac_address)}></DeviceDetails>
         }
       </div>

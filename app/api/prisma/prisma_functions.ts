@@ -31,7 +31,7 @@ export const create_maintenance_procedure: PrismaQueryFunction = async (
 /**
  * Deletes a maintenance_procedure using the specified query_params
  * id: required
- * @param query_params 
+ * @param query_params
  */
 export const delete_maintenance_procedure: PrismaQueryFunction = async (
   query_params: QueryParameters
@@ -139,31 +139,52 @@ export const update_vehicle: PrismaQueryFunction = async (
   query_params: QueryParameters
 ): Promise<void> => {
   const date_updated = new Date().toUTCString();
-  await prisma.vehicle.update({
-    where: {
-      vehicle_id: query_params["vehicle_id"],
-    },
-    data: {
-      date_updated: date_updated,
-      ...(query_params["image_url"] && {
-        image_url: query_params["image_url"],
-      }),
-      ...(query_params["runtime"] && { runtime: query_params["runtime"] }),
-      ...(query_params["mac_address"] && {
-        mac_address: query_params["mac_address"],
-      }),
-      ...(query_params["name"] && { name: query_params["name"] }),
-      ...(query_params["user_email"] && {
-        user_email: query_params["user_email"],
-      }),
-    },
-  });
+
+  if (query_params["mac_address"] === "delete") {
+    await prisma.vehicle.update({
+      where: {
+        vehicle_id: query_params["vehicle_id"],
+      },
+      data: {
+        date_updated: date_updated,
+        mac_address: null,
+        ...(query_params["image_url"] && {
+          image_url: query_params["image_url"],
+        }),
+        ...(query_params["runtime"] && { runtime: query_params["runtime"] }),
+        ...(query_params["name"] && { name: query_params["name"] }),
+        ...(query_params["user_email"] && {
+          user_email: query_params["user_email"],
+        }),
+      },
+    });
+  } else {
+    await prisma.vehicle.update({
+      where: {
+        vehicle_id: query_params["vehicle_id"],
+      },
+      data: {
+        date_updated: date_updated,
+        ...(query_params["image_url"] && {
+          image_url: query_params["image_url"],
+        }),
+        ...(query_params["runtime"] && { runtime: query_params["runtime"] }),
+        ...(query_params["mac_address"] && {
+          mac_address: query_params["mac_address"],
+        }),
+        ...(query_params["name"] && { name: query_params["name"] }),
+        ...(query_params["user_email"] && {
+          user_email: query_params["user_email"],
+        }),
+      },
+    });
+  }
 };
 
 /**
  * Deletes the specified vehicle
  * vehicle_id: required
- * @param query_params 
+ * @param query_params
  */
 export const delete_vehicle: PrismaQueryFunction = async (
   query_params: QueryParameters
@@ -214,23 +235,22 @@ export const get_devices: PrismaQueryFunction = async (
   return JSON.stringify(devices);
 };
 
+export const confirm_device_can_be_updated_by_user: PrismaQueryFunction =
+  async (query_params: QueryParameters): Promise<boolean> => {
+    const device = await prisma.device.findUnique({
+      where: {
+        mac_address: query_params["mac_address"],
+      },
+    });
 
-export const confirm_device_can_be_updated_by_user: PrismaQueryFunction = async (
-  query_params: QueryParameters
-): Promise<boolean> => {
-
-  const device = await prisma.device.findUnique({
-    where: {
-      mac_address: query_params["mac_address"],
+    if (device) {
+      return (
+        device.user_email === query_params["user_email"] ||
+        device.user_email === "kosar.liam@gmail.com"
+      );
     }
-  });
-
-  if (device) {
-    return device.user_email === query_params["user_email"] || device.user_email === "kosar.liam@gmail.com"
-  }
-  return false;  
-}
-
+    return false;
+  };
 
 export const update_device: PrismaQueryFunction = async (
   query_params: QueryParameters

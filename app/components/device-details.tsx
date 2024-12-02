@@ -34,9 +34,7 @@ export function DeviceDetails({ device, vehicle }: DeviceDetailsProps) {
           <p className="text-sm text-muted-foreground">{device.version}</p>
         </div>
         {vehicle ? <div className="mb-4 mt-5">
-            <VehicleCard vehicle={vehicle}></VehicleCard>
-
-
+            <VehicleCard hover={false} vehicle={vehicle}></VehicleCard>
         </div> : <></>}
       </CardContent>
     </Card>

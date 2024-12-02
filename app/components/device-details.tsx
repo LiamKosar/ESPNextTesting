@@ -41,7 +41,7 @@ export function DeviceDetails({ device, vehicle }: DeviceDetailsProps) {
           </div>
         </div>
 
-        <Separator orientation="horizontal"></Separator>
+        <Separator className="border-t-2" orientation="horizontal"></Separator>
         {vehicle ? (
           <div className="my-4">
             <VehicleCard hover={false} vehicle={vehicle}></VehicleCard>

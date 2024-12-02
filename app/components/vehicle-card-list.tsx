@@ -6,6 +6,7 @@ import {
 import CircularHighlightButton from "./circle-button";
 import { calcColorFromPercentage } from "./dashboard-tab";
 import { VehicleCard } from "./vehicle-card";
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 type VehicleCardListProps = {
     vehicles: Vehicle[],
@@ -16,7 +17,7 @@ type VehicleCardListProps = {
 export function VehicleDeviceCardList({ vehicles, callback, selectedItem }: VehicleCardListProps) {
 
     return (
-        <div className="p-6 grid gap-4">
+        <div style={{maxHeight: "400px"}} className="p-6 grid gap-4 overflow-scroll overscroll-none">
         {vehicles.map((vehicle: Vehicle) => (
           <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} callback={callback} selectedItem={selectedItem}></VehicleCard>
         ))}

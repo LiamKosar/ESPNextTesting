@@ -5,8 +5,8 @@ export default async function Dashboard() {
   return (
 
    
-    <div className="mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <div className="mx-auto p-4 overscroll-none">
+      {/* <h1 className="text-2xl font-bold mb-4">Dashboard</h1> */}
       <DashboardTabs />
     </div>
   )

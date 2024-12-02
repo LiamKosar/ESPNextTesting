@@ -14,12 +14,10 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 overscroll-none">
           {children}
         </div>
       </body>
-    </html>
   )
 }

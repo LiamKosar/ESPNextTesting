@@ -14,6 +14,7 @@ import { ChevronDown, Info } from "lucide-react";
 import { SearchBox, SearchBoxItem } from "./search-box";
 import React, { useState } from "react";
 import DeleteButton from "./delete-button";
+import { Separator } from "@/components/ui/separator";
 
 type VehicleDetailsProps = {
   vehicle: Vehicle;
@@ -51,11 +52,14 @@ export function VehicleDetails({
   const updateVehicleDeviceCallback = (item: Device): undefined => {
     vehicle.mac_address = item.mac_address;
     callback({type: "vehicle", item: vehicle})
+    toast("Device Connected", {
+      description: `You have successfully connected ${vehicle.name} to a device`
+    })
   };
 
   const deleteVehichleDeviceConnection = (): undefined => {
     vehicle.mac_address = "delete";
-    callback({type: "Device", item: vehicle})
+    callback({type: "vehicle", item: vehicle})
     toast("Device Disconnected", {
       description: `You have successfully disconnected ${vehicle.name} from a device`
     })
@@ -74,12 +78,12 @@ export function VehicleDetails({
           Total Runtime: {vehicle.runtime}hrs
         </div>
 
-        <Collapsible defaultOpen={true}>
+        <Collapsible className="my-4" defaultOpen={true}>
           <CollapsibleTrigger className="flex items-center text-sm text-blue-500 hover:text-blue-700">
             Maintenance Procedures
             <ChevronDown className="h-4 w-4 ml-1" />
           </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+          <CollapsibleContent className="my-2 mt-3 grid gap-4 md:grid-cols-2 lg:grid-cols-2">
             {maintenanceProcedures?.map((procedure: MaintenanceProcedure) => (
               <Card key={procedure.id} className="bg-muted p-0">
                 <CardHeader className="text-center pb-2">
@@ -117,9 +121,9 @@ export function VehicleDetails({
             ))}
           </CollapsibleContent>
         </Collapsible>
-
+        <Separator orientation="horizontal"></Separator>
         {connectedDevice ? (
-          <div className="relative mb-4 mt-5">
+          <div className="relative my-4">
             <span className="absolute flex justify-end p-4 top-0 right-0"><DeleteButton onClick={() => deleteVehichleDeviceConnection()}></DeleteButton></span>
             <DeviceCard hover={false} device={connectedDevice}></DeviceCard>
           </div>

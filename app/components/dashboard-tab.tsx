@@ -13,10 +13,6 @@ import { VehicleDeviceCardList } from "./vehicle-card-list";
 import { VehicleDetails } from "./vehicle-details";
 import { DeviceCardList } from "./device-card-list";
 import { DeviceDetails } from "./device-details";
-import { SearchBox } from "./search-box";
-
-const fetcher = (url: string): Promise<GetRequestResponse> =>
-  fetch(url).then((res) => res.json());
 
 type DashboardTabProps = {
   vehicles: Vehicle[],
@@ -36,7 +32,7 @@ const updateVehicleMacAddress = async (vehicle_id: number, mac_address: string) 
     vehicle_id: vehicle_id,
     mac_address: mac_address,
   };
-
+  
   try {
     const response = await fetch("/api/vehicle/update", {
       method: "POST",

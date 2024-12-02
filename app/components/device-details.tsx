@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Device, MaintenanceProcedure, Vehicle } from "../types/response-data";
 import { VehicleCard } from "./vehicle-card";
+import { Separator } from "@/components/ui/separator";
 
 type DeviceDetailsProps = {
   device: Device;
@@ -20,22 +21,34 @@ export function DeviceDetails({ device, vehicle }: DeviceDetailsProps) {
         </p> */}
       </CardHeader>
       <CardContent>
-        <div className="flex flex-row items-center justify-between space-y-0">
-          <p>MAC Address</p>
-          <p className="text-sm text-muted-foreground">{device.mac_address}</p>
-        </div>
-        <div className="flex flex-row items-center justify-between space-y-0">
-          <p>Last Connected</p>
-          <p className="text-sm text-muted-foreground">{device.date_updated}</p>
+        <div className="mt-2 mb-4">
+          <div className="flex flex-row items-center justify-between space-y-0">
+            <p>MAC Address</p>
+            <p className="text-sm text-muted-foreground">
+              {device.mac_address}
+            </p>
+          </div>
+          <div className="flex flex-row items-center justify-between space-y-0">
+            <p>Last Connected</p>
+            <p className="text-sm text-muted-foreground">
+              {device.date_updated}
+            </p>
+          </div>
+
+          <div className="flex flex-row items-center justify-between space-y-0">
+            <p>Version</p>
+            <p className="text-sm text-muted-foreground">{device.version}</p>
+          </div>
         </div>
 
-        <div className="flex flex-row items-center justify-between space-y-0">
-          <p>Version</p>
-          <p className="text-sm text-muted-foreground">{device.version}</p>
-        </div>
-        {vehicle ? <div className="mb-4 mt-5">
+        <Separator orientation="horizontal"></Separator>
+        {vehicle ? (
+          <div className="my-4">
             <VehicleCard hover={false} vehicle={vehicle}></VehicleCard>
-        </div> : <></>}
+          </div>
+        ) : (
+          <></>
+        )}
       </CardContent>
     </Card>
   );

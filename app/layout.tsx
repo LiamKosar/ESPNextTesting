@@ -22,7 +22,7 @@ export default function RootLayout({
       <UserProvider>
         <body className={inter.className}>
           <div>{children}</div>
-          <Toaster></Toaster>
+          <Toaster />
           <Analytics />
         </body>
       </UserProvider>

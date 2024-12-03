@@ -66,7 +66,7 @@ export function VehicleDetails({
   }
 
   return ( 
-    <Card className="p-1" style={{height: "90vh"}}>
+    <Card className="p-1" style={{maxHeight: "90vh"}}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-lg font-medium">{vehicle.name}</CardTitle>
         <p className="text-sm text-muted-foreground">

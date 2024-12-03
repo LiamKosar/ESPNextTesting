@@ -125,12 +125,11 @@ export function DashboardTab({ vehicles, devices }: DashboardTabProps) {
     });
   }, [vehicles]);
   return (
-    <div className="grid auto-rows-auto gap-4 md:grid-cols-1 lg:grid-cols-2 overscroll-contain">
+    <div className="grid auto-rows-auto gap-4 md:grid-cols-1 lg:grid-cols-2">
       
-      <div>
-      <Card style={{height: "90vh"}}>
+      <Card style={{height: "90vh"}} className="overflow-hidden">
       <Tabs defaultValue="vehicles" className="w-full bg-transparent">
-      <TabsList style={{height: "5vh"}} className="grid w-full grid-cols-6 bg-transparent m-3">
+      <TabsList style={{height: "5vh"}} className="grid grid-cols-6 bg-transparent m-3">
         <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
         <TabsTrigger value="devices">Devices</TabsTrigger>
       </TabsList>
@@ -141,8 +140,9 @@ export function DashboardTab({ vehicles, devices }: DashboardTabProps) {
       <DeviceCardList devices={devices} callback={updateSelectedItem} selectedItem={selectedItem}></DeviceCardList>
       </TabsContent>
     </Tabs>
+
+    
     </Card>
-      </div>
       
       <div>
         {selectedItem.type === "empty" ? (

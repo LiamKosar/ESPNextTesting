@@ -10,14 +10,16 @@ type VehicleCardProps = {
   vehicle: Vehicle;
   callback?: (item: ItemWrapper) => undefined;
   selectedItem?: ItemWrapper;
-  hover?: boolean
+  hover?: boolean,
+  className?: string
 };
 
 export function VehicleCard({
   vehicle,
   callback = () => {},
   selectedItem,
-  hover = true
+  hover = true,
+  className = "",
 }: VehicleCardProps) {
   const isSelected = selectedItem
     ? selectedItem.type === "vehicle" &&
@@ -27,7 +29,8 @@ export function VehicleCard({
     <Card
       className={cn(
         hover ? "cursor-pointer" : "",
-        isSelected ? "border-slate-600 border-2 border-double" : ""
+        isSelected ? "border-slate-600 border-2 border-double" : "",
+        className
       )}
       onClick={() => callback({ type: "vehicle", item: vehicle })}
     >

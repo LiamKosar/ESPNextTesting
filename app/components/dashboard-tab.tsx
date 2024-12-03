@@ -125,12 +125,12 @@ export function DashboardTab({ vehicles, devices }: DashboardTabProps) {
     });
   }, [vehicles]);
   return (
-    <div className="grid auto-rows-auto gap-4 md:grid-cols-1 lg:grid-cols-2">
+    <div className="grid auto-rows-auto gap-4 md:grid-cols-1 lg:grid-cols-2 overscroll-contain">
       
       <div>
-      <Card style={{maxHeight: "600px"}}>
+      <Card style={{height: "90vh"}}>
       <Tabs defaultValue="vehicles" className="w-full bg-transparent">
-      <TabsList className="grid w-full grid-cols-6 bg-transparent m-3">
+      <TabsList style={{height: "5vh"}} className="grid w-full grid-cols-6 bg-transparent m-3">
         <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
         <TabsTrigger value="devices">Devices</TabsTrigger>
       </TabsList>

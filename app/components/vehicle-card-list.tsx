@@ -17,7 +17,7 @@ type VehicleCardListProps = {
 export function VehicleDeviceCardList({ vehicles, callback, selectedItem }: VehicleCardListProps) {
 
     return (
-        <div style={{maxHeight: "400px"}} className="p-6 grid gap-4 overflow-scroll overscroll-none">
+        <div className="p-6 grid gap-4 overflow-scroll overscroll-contain" style={{maxHeight: "75vh"}}>
         {vehicles.map((vehicle: Vehicle) => (
           <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} callback={callback} selectedItem={selectedItem}></VehicleCard>
         ))}

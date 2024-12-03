@@ -66,7 +66,7 @@ export function VehicleDetails({
   }
 
   return ( 
-    <Card className="p-1">
+    <Card className="p-1" style={{height: "90vh"}}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-lg font-medium">{vehicle.name}</CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -83,7 +83,7 @@ export function VehicleDetails({
             Maintenance Procedures
             <ChevronDown className="h-4 w-4 ml-1" />
           </CollapsibleTrigger>
-          <CollapsibleContent style={{maxHeight: "320px"}} className="my-2 mt-3 px-3 grid gap-4 md:grid-cols-2 lg:grid-cols-2 overflow-scroll overscroll-none">
+          <CollapsibleContent style={{maxHeight: "45vh"}} className="my-2 mt-3 px-3 grid gap-4 md:grid-cols-2 lg:grid-cols-2 overflow-scroll overscroll-none">
             {maintenanceProcedures?.map((procedure: MaintenanceProcedure) => (
               <Card key={procedure.id} className="bg-muted p-0">
                 <CardHeader className="text-center pb-2">

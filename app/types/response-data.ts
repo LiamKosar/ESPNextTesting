@@ -8,7 +8,9 @@ export type Vehicle = {
     date_updated: string;
     num_red?: number,
     num_yellow?: number,
-    num_green?: number
+    num_green?: number,
+    device?: Device,
+    maintenanceProcedures?: MaintenanceProcedure[]
   };
 
 export type GetRequestResponse = {
